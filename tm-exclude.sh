@@ -166,9 +166,11 @@ FIXED_PATHS=(
     # ── macOS derived data (rebuilt by system / Spotlight) ─────────────────
     "/.Spotlight-V100"
     "$HOME/Library/Metadata/CoreSpotlight"
+    "$HOME/Library/IdentityServices"
     "$HOME/Library/HTTPStorages"
     "$HOME/Library/WebKit"
     "$HOME/Library/IntelligencePlatform"
+    "$HOME/Library/Containers/com.apple.wallpaper.agent"
 
     # ── App Support caches ─────────────────────────────────────────────────
     "$HOME/Library/Application Support/Caches"
@@ -190,8 +192,10 @@ FIXED_PATHS=(
     # ── Chrome Canary app bundle (profile data lives in ~/Library) ─────────
     "/Applications/Google Chrome Canary.app"
 
-    # ── Chrome Service Worker caches, every existing profile ───────────────
+    # ── Chrome per-profile caches (Service Worker, HTTP cache, V8 code cache)
     "$HOME/Library/Application Support/Google/Chrome"/*/"Service Worker/CacheStorage"
+    "$HOME/Library/Application Support/Google/Chrome"/*/"Cache"
+    "$HOME/Library/Application Support/Google/Chrome"/*/"Code Cache"
 
     # ── System caches (rebuilt automatically by macOS) ─────────────────────
     "/System/Library/Caches"
