@@ -209,6 +209,15 @@ FIXED_PATHS=(
     "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Service Worker"
     "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Cache"
 
+    # ── Microsoft Office 365 Group Container ───────────────────────────────
+    # SolutionPackages: downloaded Office add-in bundles; re-downloaded by Office.
+    # FontCache: rebuilt by Office on first use.
+    # (Outlook profiles and OneDrive files are kept.)
+    "$HOME/Library/Group Containers/UBF8T346G9.Office/SolutionPackages"
+    "$HOME/Library/Group Containers/UBF8T346G9.Office/FontCache"
+    "$HOME/Library/Group Containers/UBF8T346G9.OneDriveStandaloneSuite/FileProviderLogs"
+    "$HOME/Library/Group Containers/UBF8T346G9.com.microsoft.teams/Library/Application Support/Logs"
+
     # ── Claude Desktop / Claude Code ───────────────────────────────────────
     # claude-code: Claude Code app files bundled inside the desktop app.
     # claude-code-vm: versioned VM runtime downloaded by Claude Code.
