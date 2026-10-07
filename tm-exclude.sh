@@ -167,6 +167,7 @@ FIXED_PATHS=(
     "/.Spotlight-V100"
     "$HOME/Library/Metadata/CoreSpotlight"
     "$HOME/Library/IdentityServices"
+    "$HOME/Library/Biome"
     "$HOME/Library/HTTPStorages"
     "$HOME/Library/WebKit"
     "$HOME/Library/IntelligencePlatform"
