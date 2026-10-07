@@ -58,3 +58,9 @@ Test `tm-delta.py` without a live backup by loading it with `importlib` and pass
 - Exclusion deduplication in `tm-exclude.sh` is in-memory: `CURRENT_EXCLUSIONS` is updated after every planned add so that child paths are correctly detected as covered before the batch is applied.
 - `tm-prune-exclusions.py` reads plists with `plistlib` (not `PlistBuddy`) for safe structured access; it never checks whether a path exists before calling `tmutil removeexclusion` — stale paths are intentionally handled.
 - `SkipPaths` in `/Library/Preferences/com.apple.TimeMachine.plist` stores path-based exclusions. `tmutil` has no `list` verb for these; `tm-exclude.sh` reads them via `PlistBuddy -c "Print :SkipPaths"`.
+
+## Exclusion maintenance notes
+
+- **Two-step workflow**: always run `tm-exclude.sh` first (adds/removes), then `tm-prune-exclusions.py --apply` (removes redundancies). Neither alone is sufficient after adding broad parent paths.
+- **Before adding parent-level globs to `FIXED_PATHS`**, check existing `SkipPaths` for child paths that would become redundant: `/usr/libexec/PlistBuddy -c "Print :SkipPaths" /Library/Preferences/com.apple.TimeMachine.plist`. Adding a glob that covers a tree makes any individually-listed children redundant; `tm-prune-exclusions.py --apply` catches them, but it's better to avoid creating them.
+- **`FIXED_PATHS` vs `tm-exclusions.manual`**: `FIXED_PATHS` is for paths common across developer machines (package caches, build dirs, system caches). Paths that depend on user preference (e.g. iCloud Photos library) or machine-specific identifiers (e.g. iCloud Keychain UUID) go in `~/.config/tm-exclude/tm-exclusions.manual` instead — they're personal and don't belong committed to the repo.
