@@ -172,6 +172,9 @@ FIXED_PATHS=(
     "$HOME/Library/WebKit"
     "$HOME/Library/IntelligencePlatform"
     "$HOME/Library/Containers/com.apple.wallpaper.agent"
+    # Internet Accounts database: accounts are re-added after a restore;
+    # the local DB and its WAL file rebuild automatically on login.
+    "$HOME/Library/Accounts"
 
     # ── App Support caches ─────────────────────────────────────────────────
     "$HOME/Library/Application Support/Caches"
@@ -193,10 +196,13 @@ FIXED_PATHS=(
     # ── Chrome Canary app bundle (profile data lives in ~/Library) ─────────
     "/Applications/Google Chrome Canary.app"
 
-    # ── Chrome per-profile caches (Service Worker, HTTP cache, V8 code cache)
+    # ── Chrome per-profile caches ──────────────────────────────────────────
     "$HOME/Library/Application Support/Google/Chrome"/*/"Service Worker/CacheStorage"
     "$HOME/Library/Application Support/Google/Chrome"/*/"Cache"
     "$HOME/Library/Application Support/Google/Chrome"/*/"Code Cache"
+    "$HOME/Library/Application Support/Google/Chrome"/*/"GPUCache"
+    "$HOME/Library/Application Support/Google/Chrome"/*/"DawnWebGPUCache"
+    "$HOME/Library/Application Support/Google/Chrome"/*/"DawnGraphiteCache"
 
     # ── System caches (rebuilt automatically by macOS) ─────────────────────
     "/System/Library/Caches"
@@ -207,22 +213,28 @@ FIXED_PATHS=(
     "/Library/Tanium"
     "/Library/Application Support/Microsoft/Defender"
 
-    # ── Electron app caches: Teams and Slack ───────────────────────────────
-    # Teams: only Caches; Application Support/Microsoft/MSTeams has local data.
-    "$HOME/Library/Containers/com.microsoft.teams2/Data/Library/Caches"
-    # Slack: Service Worker and Cache are the large items (~910 MB).
-    # IndexedDB and Local Storage are kept (small, contains app state).
-    "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Service Worker"
-    "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Cache"
+    # ── Microsoft Office / Teams containers ────────────────────────────────
+    # Caches and Logs in every com.microsoft.* sandbox are transient.
+    # Application Support is kept (contains AutoRecovery state).
+    "$HOME/Library/Containers"/com.microsoft.*/Data/Library/Caches
+    "$HOME/Library/Containers"/com.microsoft.*/Data/Library/Logs
 
     # ── Microsoft Office 365 Group Container ───────────────────────────────
+    # Outlook profile: local cache of Exchange/M365 mail, calendar, contacts.
+    # All data is on the server; Outlook resyncs on login after a restore.
+    "$HOME/Library/Group Containers/UBF8T346G9.Office/Outlook"
     # SolutionPackages: downloaded Office add-in bundles; re-downloaded by Office.
     # FontCache: rebuilt by Office on first use.
-    # (Outlook profiles and OneDrive files are kept.)
     "$HOME/Library/Group Containers/UBF8T346G9.Office/SolutionPackages"
     "$HOME/Library/Group Containers/UBF8T346G9.Office/FontCache"
     "$HOME/Library/Group Containers/UBF8T346G9.OneDriveStandaloneSuite/FileProviderLogs"
     "$HOME/Library/Group Containers/UBF8T346G9.com.microsoft.teams/Library/Application Support/Logs"
+
+    # ── Slack ───────────────────────────────────────────────────────────────
+    # Service Worker and Cache are the large items (~910 MB).
+    # IndexedDB and Local Storage are kept (small, contains app state).
+    "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Service Worker"
+    "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Cache"
 
     # ── Claude Desktop / Claude Code ───────────────────────────────────────
     # claude-code: Claude Code app files bundled inside the desktop app.
