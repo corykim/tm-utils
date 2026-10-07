@@ -42,6 +42,7 @@ Run it as your normal user, not with `sudo`. It plans everything as you, then ap
 - kubectl and AWS CLI caches
 - Docker Desktop VM disk
 - Apple `container` per-container disk images (`~/Library/Application Support/com.apple.container/containers`). Container state isn't restored; images and layers are still backed up.
+- `/System/Library/Caches` — system caches rebuilt automatically by macOS (`coresymbolicationd` alone is 3+ GB and rewrites every backup)
 - Google, Krisp, and Microsoft Edge updater caches
 - The Chrome Canary app bundle
 - Chrome Service Worker caches for every profile

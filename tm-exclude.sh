@@ -168,6 +168,9 @@ FIXED_PATHS=(
     # ── Chrome Service Worker caches, every existing profile ───────────────
     "$HOME/Library/Application Support/Google/Chrome"/*/"Service Worker/CacheStorage"
 
+    # ── System caches (rebuilt automatically by macOS) ─────────────────────
+    "/System/Library/Caches"
+
     # ── Corporate endpoint agents (Tanium, Defender) ───────────────────────
     # Large, constantly rewritten, and redeployed by IT/MDM. A restored
     # machine may show these agents as unhealthy until IT reinstalls them.
