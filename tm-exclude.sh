@@ -164,6 +164,7 @@ FIXED_PATHS=(
     "$HOME/Library/pnpm"
 
     # ── macOS derived data (rebuilt by system / Spotlight) ─────────────────
+    "/.Spotlight-V100"
     "$HOME/Library/Metadata/CoreSpotlight"
     "$HOME/Library/HTTPStorages"
     "$HOME/Library/WebKit"
