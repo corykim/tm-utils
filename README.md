@@ -138,7 +138,7 @@ Logs go to stderr and the final summary goes to stdout. After an `--apply` that 
 ./tm-delta.py --uninstall        # remove the LaunchAgent; history is kept
 ```
 
-No `sudo` needed. Each row shows the backup name, whether it completed, files copied, bytes copied, how long it took, hours since the previous backup, and GB per hour. Rows over the threshold are flagged.
+No `sudo` needed. Each row shows the date, when the backup started and finished (local time), whether it completed, files copied, bytes copied, how long it took, hours since the previous backup, and GB per hour. Rows over the threshold are flagged.
 
 The GB/hour rate is the column to watch. A big backup after a long gap (for example, after the share was unreachable for a few hours) is expected. A high rate on a backup that ran on schedule means something is churning.
 
@@ -147,7 +147,7 @@ The GB/hour rate is the column to watch. A big backup after a long gap (for exam
 `backupd` on macOS 26 doesn't log per-backup copy totals, so the script reads them from `tmutil status -X` while the backup runs. The LaunchAgent (`com.corykim.tm-delta`) runs `tm-delta.py --watch` every minute. If no backup is running it exits at once. If one is running, it samples the status every 5 seconds until the backup ends, then appends a row to `~/Library/Logs/tm-delta/history.csv`.
 
 - **Copied bytes and files** are `Progress.bytes` and `Progress.files` at the end of the Copying phase. `Progress.totalBytes` and `totalFiles` cover the whole source volume, not the backup, so they're ignored. `Percent` is unreliable too: it ended at 0.67 on a backup that finished.
-- **Complete or incomplete** is decided when you run `tm-delta.py`, not when the agent records the row. A row is complete if a `SnapshotDates` entry in `/Library/Preferences/com.apple.TimeMachine.plist` falls between its start and end. That entry gives the backup its name (for example `2026-10-06-184609`), the same name `tm-diff.py` uses. Otherwise the row is incomplete (failed or cancelled).
+- **Complete or incomplete** is decided when you run `tm-delta.py`, not when the agent records the row. A row is complete if a `SnapshotDates` entry in `/Library/Preferences/com.apple.TimeMachine.plist` falls between its start and end. That entry gives the backup its name (for example `2026-10-06-184609`), the same name `tm-diff.py` uses. Otherwise the row is `deleted` if it reached the final phases (`Finishing` or `ThinningPostBackup`), because Time Machine has since removed that backup, or `incomplete` if it didn't (failed or cancelled).
 - **Why not in the agent:** that plist, and `tmutil latestbackup`, need Full Disk Access. Your terminal has it, but the LaunchAgent's Python doesn't, and granting it to a general-purpose Python would extend it to every script that Python runs. If you run `tm-delta.py` from somewhere without Full Disk Access, the status shows `unknown`.
 - **Since prev** is measured to the previous `SnapshotDates` entry, so it stays correct even if the watcher missed earlier backups.
 

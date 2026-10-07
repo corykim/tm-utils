@@ -216,7 +216,7 @@ def human(n: int) -> str:
 
 
 def print_table(rows: List[dict], stamps: Optional[List[str]], threshold: int) -> None:
-    hdr = (f"{'Backup':<17}  {'Status':<10}  {'Files':>6}  "
+    hdr = (f"{'Date':<14}  {'Start':<5}  {'End':<5}  {'Status':<10}  {'Files':>6}  "
            f"{'Copied':>10}  {'Took':>6}  {'Since prev':>10}  {'GB/hour':>7}")
     print(hdr)
     print("─" * len(hdr))
@@ -226,8 +226,12 @@ def print_table(rows: List[dict], stamps: Optional[List[str]], threshold: int) -
         name = match_backup(r, stamps) if stamps is not None else ""
         if stamps is None:
             status = "unknown"
+        elif name:
+            status = "complete"
+        elif r.get("last_phase") in LATE_PHASES:
+            status = "deleted"
         else:
-            status = "complete" if name else "incomplete"
+            status = "incomplete"
         hours = None
         if name:
             i = stamps.index(name)
@@ -237,9 +241,14 @@ def print_table(rows: List[dict], stamps: Optional[List[str]], threshold: int) -
         since = f"{hours:.1f} h" if hours else "-"
         rate = f"{r['bytes'] / 1e9 / hours:.2f}" if hours else "-"
         flag = "  ◀ over threshold" if r["bytes"] > threshold else ""
-        label = name or r["start"][:16].replace("T", " ")
-        print(f"{label:<17}  {status:<10}  {r['files']:>6}  "
+        start = datetime.fromisoformat(r["start"])
+        # A matched backup's name is when it finished; otherwise use when the watcher saw it stop.
+        end = datetime.strptime(name, STAMP) if name else datetime.fromisoformat(r["end"])
+        print(f"{start:%a %Y-%m-%d}  {start:%H:%M}  {end:%H:%M}  {status:<10}  {r['files']:>6}  "
               f"{human(r['bytes']):>10}  {took_s:>6}  {since:>10}  {rate:>7}{flag}")
+    if stamps is not None and any(match_backup(r, stamps) == "" and r.get("last_phase") in LATE_PHASES
+                                  for r in rows):
+        print("\ndeleted = the backup finished, but Time Machine has since removed it.")
     if stamps is None:
         print(f"\nCan't read {TM_PLIST} (needs Full Disk Access), so backups can't be"
               "\nmatched to snapshots. Run this from a terminal that has it.")
@@ -324,7 +333,7 @@ def main() -> None:
         if not os.path.exists(AGENT_PLIST):
             print("Run tm-delta.py --install so the next backup gets recorded.")
         return
-    rows = sorted(hist.values(), key=lambda r: r["start"])[-args.last:]
+    rows = sorted(hist.values(), key=lambda r: r["start"], reverse=True)[:args.last]
     print_table(rows, snapshot_stamps(), int(args.threshold_gb * 1e9))
     if not os.path.exists(AGENT_PLIST):
         print("\nLaunchAgent not installed; new backups won't be recorded (--install).")
