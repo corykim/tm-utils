@@ -139,6 +139,9 @@ FIXED_PATHS=(
     "$HOME/.nvm"
     "$HOME/.rbenv/versions"
 
+    # ── Java (user-installed JDKs via Toolbox / SDKMAN / manual) ──────────
+    "$HOME/Library/Java/JavaVirtualMachines"
+
     # ── Terraform (global plugin cache) ────────────────────────────────────
     # .terraform.lock.hcl and terraform.tfstate are NOT excluded.
     "$HOME/.terraform.d/plugin-cache"
@@ -157,10 +160,31 @@ FIXED_PATHS=(
     # kept, since they rarely change.
     "$HOME/Library/Application Support/com.apple.container/containers"
 
+    # ── pnpm global content store ──────────────────────────────────────────
+    "$HOME/Library/pnpm"
+
+    # ── macOS derived data (rebuilt by system / Spotlight) ─────────────────
+    "$HOME/Library/Metadata/CoreSpotlight"
+    "$HOME/Library/HTTPStorages"
+    "$HOME/Library/WebKit"
+    "$HOME/Library/IntelligencePlatform"
+
+    # ── App Support caches ─────────────────────────────────────────────────
+    "$HOME/Library/Application Support/Caches"
+    "$HOME/Library/Application Support/pyinstaller"
+
     # ── Updater caches (re-downloadable) ───────────────────────────────────
     "$HOME/Library/Application Support/Google/GoogleUpdater"
     "$HOME/Library/Application Support/krisp/update"
     "/Library/Application Support/Microsoft/EdgeUpdater"
+
+    # ── Krisp: downloaded AI noise-cancellation models and Electron partitions
+    "$HOME/Library/Application Support/krisp/models"
+    "$HOME/Library/Application Support/krisp/Partitions"
+
+    # ── Zoom: downloaded speech recognition model and bundled Chromium plugin
+    "$HOME/Library/Application Support/zoom.us/asr"
+    "$HOME/Library/Application Support/zoom.us/CefPlugin"
 
     # ── Chrome Canary app bundle (profile data lives in ~/Library) ─────────
     "/Applications/Google Chrome Canary.app"
@@ -177,9 +201,31 @@ FIXED_PATHS=(
     "/Library/Tanium"
     "/Library/Application Support/Microsoft/Defender"
 
-    # ── Utilities and Productivity ───────────────────────────────────────────
+    # ── Electron app caches: Teams and Slack ───────────────────────────────
+    # Teams: only Caches; Application Support/Microsoft/MSTeams has local data.
+    "$HOME/Library/Containers/com.microsoft.teams2/Data/Library/Caches"
+    # Slack: Service Worker and Cache are the large items (~910 MB).
+    # IndexedDB and Local Storage are kept (small, contains app state).
+    "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Service Worker"
+    "$HOME/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/Cache"
+
+    # ── Claude Desktop / Claude Code ───────────────────────────────────────
+    # claude-code: Claude Code app files bundled inside the desktop app.
+    # claude-code-vm: versioned VM runtime downloaded by Claude Code.
+    # vm_bundles: Linux VM disk images (10+ GB), re-downloaded as needed.
+    # Cache / Code Cache / GPUCache: standard Electron/V8/GPU caches.
+    # Sessions (local-agent-mode-sessions, claude-code-sessions) are kept.
     "$HOME/Library/Application Support/Claude/claude-code"
+    "$HOME/Library/Application Support/Claude-Home/claude-code"
+    "$HOME/Library/Application Support/Claude-Home/claude-code-vm"
+    "$HOME/Library/Application Support/Claude-Home/vm_bundles"
+    "$HOME/Library/Application Support/Claude-Home/Cache"
+    "$HOME/Library/Application Support/Claude-Home/Code Cache"
+    "$HOME/Library/Application Support/Claude-Home/GPUCache"
+
+    # ── Utilities and Productivity ───────────────────────────────────────────
     "$HOME/Library/Application Support/Notion/Partitions"
+    "$HOME/Library/Application Support/Superhuman"
 )
 
 # ─── Load search roots ───────────────────────────────────────────────────────

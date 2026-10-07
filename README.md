@@ -34,16 +34,24 @@ Run it as your normal user, not with `sudo`. It plans everything as you, then ap
 **Fixed paths**, skipped if they don't exist:
 
 - Xcode `DerivedData`
-- npm, Yarn, and uv caches
+- npm, Yarn, uv, and pnpm caches and content store
 - Maven `~/.m2/repository`, Gradle `~/.gradle/caches`
 - Cargo registry and rustup toolchains (`~/.cargo/bin` is kept)
 - pyenv, asdf, nvm, and rbenv installs
+- Java JDKs in `~/Library/Java/JavaVirtualMachines` (installed via Toolbox, SDKMAN, or manually)
 - Terraform global plugin cache
 - kubectl and AWS CLI caches
 - Docker Desktop VM disk
 - Apple `container` per-container disk images (`~/Library/Application Support/com.apple.container/containers`). Container state isn't restored; images and layers are still backed up.
-- `/System/Library/Caches` — system caches rebuilt automatically by macOS (`coresymbolicationd` alone is 3+ GB and rewrites every backup)
+- macOS derived data rebuilt automatically: Spotlight index (`Metadata/CoreSpotlight`), `HTTPStorages`, `WebKit` storage, `IntelligencePlatform` (Apple Intelligence on-device models)
+- `~/Library/Application Support/Caches` and PyInstaller binary build cache
+- Zoom: downloaded speech recognition model (`asr`) and bundled Chromium plugin (`CefPlugin`)
+- Krisp: downloaded AI models and Electron partitions (update cache already excluded)
+- `/System/Library/Caches` — system caches rebuilt by macOS (`coresymbolicationd` alone is 3+ GB and rewrites every backup)
 - Google, Krisp, and Microsoft Edge updater caches
+- Microsoft Teams container `Caches` directory
+- Slack container `Service Worker` and `Cache` directories (IndexedDB and Local Storage are kept)
+- Claude Desktop: `claude-code` app files, `claude-code-vm` runtime bundle, `vm_bundles` VM disk images (10+ GB), and Electron/V8/GPU caches. Session data is kept.
 - The Chrome Canary app bundle
 - Chrome Service Worker caches for every profile
 - Tanium and Microsoft Defender agent data (redeployed by IT; a restored machine may show these agents unhealthy until IT reinstalls them)
